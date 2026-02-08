@@ -86,4 +86,15 @@ class CategoryService {
     final categoriesJson = json.encode(categories.map((cat) => cat.toJson()).toList());
     return await prefs.setString(_categoriesKey, categoriesJson);
   }
+
+  /// Import categories (replaces existing categories)
+  Future<bool> importCategories(List<Category> categories) async {
+    return await _saveCategories(categories);
+  }
+
+  /// Clear all categories
+  Future<bool> clearCategories() async {
+    final prefs = await SharedPreferences.getInstance();
+    return await prefs.remove(_categoriesKey);
+  }
 }

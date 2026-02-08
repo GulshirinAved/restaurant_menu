@@ -213,14 +213,18 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
 
             // Actions
             Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 // Edit Button
                 IconButton(
-                  icon: const Icon(Icons.edit),
+                  icon: const Icon(Icons.edit, color: Colors.blue),
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (_) => AddProductScreen(itemToEdit: item))).then((_) => context.read<MenuBloc>().add(LoadMenu()));
                   },
                 ),
+
+                // Delete Button
+                IconButton(icon: const Icon(Icons.delete, color: Colors.red), onPressed: () => _showDeleteConfirmDialog(context, item)),
 
                 // Toggle Availability
                 Switch(
@@ -269,5 +273,30 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
 
   Widget _buildPlaceholder() {
     return Container(color: Colors.grey[800], child: const Icon(Icons.restaurant, color: Colors.grey, size: 40));
+  }
+
+  void _showDeleteConfirmDialog(BuildContext context, MenuItem item) {
+    final currentLang = context.read<LanguageBloc>().state.locale.languageCode;
+    showDialog(
+      context: context,
+      builder:
+          (dialogContext) => AlertDialog(
+            title: Text(AppLocalizations.of(context)!.translate('delete_product')),
+            content: Text('${AppLocalizations.of(context)!.translate('delete_confirm')} "${item.getName(currentLang)}"?', style: const TextStyle(fontFamily: 'Gilroy')),
+            actions: [
+              TextButton(onPressed: () => Navigator.pop(dialogContext), child: Text(AppLocalizations.of(context)!.translate('cancel'))),
+              TextButton(
+                onPressed: () {
+                  context.read<MenuBloc>().add(DeleteMenuItem(item.id));
+                  Navigator.pop(dialogContext);
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.translate('product_deleted'), style: const TextStyle(fontFamily: 'Gilroy')), backgroundColor: Colors.green));
+                },
+                child: Text(AppLocalizations.of(context)!.translate('delete'), style: const TextStyle(color: Colors.red)),
+              ),
+            ],
+          ),
+    );
   }
 }

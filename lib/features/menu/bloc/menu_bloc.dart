@@ -12,6 +12,9 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
     on<FilterMenuByCategory>(_onFilterByCategory);
     on<AddMenuItem>(_onAddMenuItem);
     on<UpdateMenuItem>(_onUpdateMenuItem);
+    on<DeleteMenuItem>(_onDeleteMenuItem);
+    on<ExportToExcel>(_onExportToExcel);
+    on<ImportFromExcel>(_onImportFromExcel);
   }
 
   // In-memory list to track current items
@@ -68,6 +71,74 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
       _emitLoaded(emit, List.from(_currentItems));
     } catch (e) {
       emit(MenuError('Failed to update item: $e'));
+    }
+  }
+
+  Future<void> _onDeleteMenuItem(DeleteMenuItem event, Emitter<MenuState> emit) async {
+    try {
+      // Step 1: Remove from in-memory list
+      _currentItems.removeWhere((item) => item.id == event.itemId);
+
+      // Step 2: Save updated list to Excel
+      await _excelService.saveAllMenuItems(_currentItems);
+
+      // Step 3: Update UI state
+      _emitLoaded(emit, List.from(_currentItems));
+    } catch (e) {
+      emit(MenuError('Failed to delete item: $e'));
+    }
+  }
+
+  Future<void> _onExportToExcel(ExportToExcel event, Emitter<MenuState> emit) async {
+    try {
+      final currentState = state;
+      emit(MenuLoading());
+
+      final filePath = await _excelService.exportToExcel(_currentItems, event.categories);
+
+      if (filePath != null) {
+        emit(MenuExportSuccess(filePath));
+      } else {
+        emit(MenuError('Failed to export: Permission denied or file creation failed'));
+      }
+
+      // Restore previous state
+      if (currentState is MenuLoaded) {
+        emit(currentState);
+      }
+    } catch (e) {
+      emit(MenuError('Failed to export: $e'));
+    }
+  }
+
+  Future<void> _onImportFromExcel(ImportFromExcel event, Emitter<MenuState> emit) async {
+    try {
+      emit(MenuLoading());
+
+      final data = await _excelService.importFromExcel();
+
+      if (data == null) {
+        emit(MenuError('Import cancelled or failed'));
+        return;
+      }
+
+      final items = data['items'] as List<MenuItem>;
+      final categories = data['categories'] as List;
+
+      // Save imported items to local Excel
+      await _excelService.saveAllMenuItems(items);
+
+      // Update in-memory list
+      _currentItems.clear();
+      _currentItems.addAll(items);
+
+      // Emit success state with categories for UI to handle
+      emit(MenuImportSuccess(items, categories));
+
+      // Then emit loaded state
+      _emitLoaded(emit, List.from(_currentItems));
+    } catch (e) {
+      emit(MenuError('Failed to import: $e'));
     }
   }
 

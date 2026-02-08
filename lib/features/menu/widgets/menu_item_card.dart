@@ -115,26 +115,26 @@ class MenuItemCard extends StatelessWidget {
                             item.available
                                 ? () {
                                   context.read<CartBloc>().add(AddCartItem(item));
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      backgroundColor: theme.colorScheme.surface,
-                                      behavior: SnackBarBehavior.floating,
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                      content: Row(
-                                        children: [
-                                          Icon(Icons.check_circle, color: theme.colorScheme.primary),
-                                          const SizedBox(width: 12),
-                                          Expanded(
-                                            child: Text(
-                                              '${item.getName(currentLang)} ${AppLocalizations.of(context)!.translate('item_added')}',
-                                              style: const TextStyle(fontFamily: 'Gilroy', color: Colors.white, fontWeight: FontWeight.w600),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      action: SnackBarAction(label: AppLocalizations.of(context)!.translate('undo'), textColor: theme.colorScheme.primary, onPressed: () {}),
-                                    ),
-                                  );
+                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                  //   SnackBar(
+                                  //     backgroundColor: theme.colorScheme.surface,
+                                  //     behavior: SnackBarBehavior.floating,
+                                  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                  //     content: Row(
+                                  //       children: [
+                                  //         Icon(Icons.check_circle, color: theme.colorScheme.primary),
+                                  //         const SizedBox(width: 12),
+                                  //         Expanded(
+                                  //           child: Text(
+                                  //             '${item.getName(currentLang)} ${AppLocalizations.of(context)!.translate('item_added')}',
+                                  //             style: const TextStyle(fontFamily: 'Gilroy', color: Colors.white, fontWeight: FontWeight.w600),
+                                  //           ),
+                                  //         ),
+                                  //       ],
+                                  //     ),
+                                  //     action: SnackBarAction(label: AppLocalizations.of(context)!.translate('undo'), textColor: theme.colorScheme.primary, onPressed: () {}),
+                                  //   ),
+                                  // );
                                 }
                                 : null,
                         style: ElevatedButton.styleFrom(

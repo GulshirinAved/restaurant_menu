@@ -22,6 +22,8 @@ dependencies:
     path: packages/excel
   path_provider: ^2.1.2
   permission_handler: ^11.3.1
+  file_picker: ^8.1.6
+  share_plus: ^10.1.2
   image_picker: ^1.0.7
   flutter_image_compress: ^2.4.0
   shared_preferences: ^2.5.3

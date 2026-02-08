@@ -32,3 +32,22 @@ class MenuError extends MenuState {
   @override
   List<Object> get props => [message];
 }
+
+class MenuExportSuccess extends MenuState {
+  final String filePath;
+
+  const MenuExportSuccess(this.filePath);
+
+  @override
+  List<Object> get props => [filePath];
+}
+
+class MenuImportSuccess extends MenuState {
+  final List<MenuItem> items;
+  final List categories;
+
+  const MenuImportSuccess(this.items, this.categories);
+
+  @override
+  List<Object> get props => [items, categories];
+}

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:restaurant_menu_app/features/menu/models/menu_item.dart';
+import 'package:restaurant_menu_app/features/settings/models/category.dart';
 
 abstract class MenuEvent extends Equatable {
   const MenuEvent();
@@ -32,4 +33,24 @@ class UpdateMenuItem extends MenuEvent {
 
   @override
   List<Object> get props => [item];
+}
+
+class DeleteMenuItem extends MenuEvent {
+  final String itemId;
+  const DeleteMenuItem(this.itemId);
+
+  @override
+  List<Object> get props => [itemId];
+}
+
+class ExportToExcel extends MenuEvent {
+  final List<Category> categories;
+  const ExportToExcel(this.categories);
+
+  @override
+  List<Object> get props => [categories];
+}
+
+class ImportFromExcel extends MenuEvent {
+  const ImportFromExcel();
 }

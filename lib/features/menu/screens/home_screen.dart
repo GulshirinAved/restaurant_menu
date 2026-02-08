@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -100,14 +99,13 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
           },
-          icon: Icon(IconlyLight.setting, color: Colors.white),
+          icon: Icon(IconlyLight.setting, color: Colors.transparent),
         ),
         title: Text(
           AppLocalizations.of(context)!.translate('menu'),
           style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontWeight: FontWeight.w800, fontFamily: 'Gilroy', fontSize: 28),
         ),
         actions: [
-          _buildCartBadge(context),
           PopupMenuButton<Locale>(
             icon: HugeIcon(icon: HugeIcons.strokeRoundedLanguageSquare, color: Colors.white, size: 30.0),
             onSelected: (Locale locale) {
@@ -150,6 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+      floatingActionButton: _buildCartFAB(context),
       body: Container(
         color: Theme.of(context).scaffoldBackgroundColor,
         child: CustomScrollView(
@@ -192,14 +191,13 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
           },
-          icon: Icon(IconlyLight.setting, color: Colors.white),
+          icon: Icon(IconlyLight.setting, color: Colors.transparent),
         ),
         title: Text(
           AppLocalizations.of(context)!.translate('menu'),
           style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontWeight: FontWeight.w800, fontFamily: 'Gilroy', fontSize: 28),
         ),
         actions: [
-          _buildCartBadge(context),
           PopupMenuButton<Locale>(
             icon: HugeIcon(icon: HugeIcons.strokeRoundedLanguageSquare, color: Colors.white, size: 30.0),
             onSelected: (Locale locale) {
@@ -243,6 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+      floatingActionButton: _buildCartFAB(context),
       body:
           items.isEmpty
               ? _buildStatusView(
@@ -282,18 +281,46 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildCartBadge(BuildContext context) {
+  Widget _buildCartFAB(BuildContext context) {
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
-        return badges.Badge(
-          position: badges.BadgePosition.topEnd(top: 0, end: 3),
-          showBadge: state.totalItems > 0,
-          badgeStyle: badges.BadgeStyle(badgeColor: Theme.of(context).primaryColor),
-          badgeContent: Text('${state.totalItems}', style: const TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)),
-          child: IconButton(
-            icon: HugeIcon(icon: HugeIcons.strokeRoundedShoppingBasket01, color: Colors.white, size: 30.0),
+        if (state.totalItems == 0) {
+          return const SizedBox.shrink();
+        }
 
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const OrderScreen())),
+        return Container(
+          height: 70,
+          width: 70,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor.withOpacity(0.8)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(color: Theme.of(context).primaryColor.withOpacity(0.4), blurRadius: 20, spreadRadius: 2, offset: const Offset(0, 8)),
+              BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 15, offset: const Offset(0, 4)),
+            ],
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(20),
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const OrderScreen())),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  HugeIcon(icon: HugeIcons.strokeRoundedShoppingBasket01, color: Colors.black, size: 32.0),
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(color: Colors.black, shape: BoxShape.circle, border: Border.all(color: Theme.of(context).primaryColor, width: 2)),
+                      constraints: const BoxConstraints(minWidth: 24, minHeight: 24),
+                      child: Center(child: Text('${state.totalItems}', style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Gilroy'))),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         );
       },
