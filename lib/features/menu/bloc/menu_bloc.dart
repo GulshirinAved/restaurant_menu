@@ -7,12 +7,11 @@ import 'menu_state.dart';
 class MenuBloc extends Bloc<MenuEvent, MenuState> {
   final ExcelService _excelService;
 
-  MenuBloc({ExcelService? excelService})
-    : _excelService = excelService ?? ExcelService(),
-      super(MenuInitial()) {
+  MenuBloc({ExcelService? excelService}) : _excelService = excelService ?? ExcelService(), super(MenuInitial()) {
     on<LoadMenu>(_onLoadMenu);
     on<FilterMenuByCategory>(_onFilterByCategory);
     on<AddMenuItem>(_onAddMenuItem);
+    on<UpdateMenuItem>(_onUpdateMenuItem);
   }
 
   // In-memory list to track current items
@@ -33,19 +32,13 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
     }
   }
 
-  void _onFilterByCategory(
-    FilterMenuByCategory event,
-    Emitter<MenuState> emit,
-  ) {
+  void _onFilterByCategory(FilterMenuByCategory event, Emitter<MenuState> emit) {
     if (state is MenuLoaded) {
       _emitLoaded(emit, _currentItems, selectedCategory: event.category);
     }
   }
 
-  Future<void> _onAddMenuItem(
-    AddMenuItem event,
-    Emitter<MenuState> emit,
-  ) async {
+  Future<void> _onAddMenuItem(AddMenuItem event, Emitter<MenuState> emit) async {
     try {
       // Step 1: Save to Excel file first
       await _excelService.addMenuItem(event.item);
@@ -60,15 +53,29 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
     }
   }
 
-  void _emitLoaded(
-    Emitter<MenuState> emit,
-    List<MenuItem> items, {
-    String? selectedCategory,
-  }) {
-    // 1. Filter available items
+  Future<void> _onUpdateMenuItem(UpdateMenuItem event, Emitter<MenuState> emit) async {
+    try {
+      // Step 1: Update in-memory list
+      final index = _currentItems.indexWhere((item) => item.id == event.item.id);
+      if (index != -1) {
+        _currentItems[index] = event.item;
+      }
+
+      // Step 2: Save all items to Excel
+      await _excelService.saveAllMenuItems(_currentItems);
+
+      // Step 3: Update UI state
+      _emitLoaded(emit, List.from(_currentItems));
+    } catch (e) {
+      emit(MenuError('Failed to update item: $e'));
+    }
+  }
+
+  void _emitLoaded(Emitter<MenuState> emit, List<MenuItem> items, {String? selectedCategory}) {
+    // 1. Filter available items for home screen
     final availableItems = items.where((i) => i.available).toList();
 
-    // 2. Group by category
+    // 2. Group by category (only available items)
     final Map<String, List<MenuItem>> grouped = {};
     for (var item in availableItems) {
       if (!grouped.containsKey(item.category)) {
@@ -77,12 +84,6 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
       grouped[item.category]!.add(item);
     }
 
-    emit(
-      MenuLoaded(
-        allItems: availableItems,
-        categorizedItems: grouped,
-        selectedCategory: selectedCategory,
-      ),
-    );
+    emit(MenuLoaded(allItems: availableItems, allItemsIncludingUnavailable: items, categorizedItems: grouped, selectedCategory: selectedCategory));
   }
 }

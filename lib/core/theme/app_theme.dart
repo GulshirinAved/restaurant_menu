@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Premium Tablet-First Color Palette
@@ -17,85 +16,37 @@ class AppTheme {
       brightness: Brightness.dark,
       scaffoldBackgroundColor: background,
       primaryColor: primary,
-      colorScheme: const ColorScheme.dark(
-        primary: primary,
-        secondary: primary,
-        surface: surface,
-        background: background,
-        error: error,
-      ),
+      colorScheme: const ColorScheme.dark(primary: primary, secondary: primary, surface: surface, background: background, error: error),
 
-      // Typography - Outfit (Headings) & DM Sans (Body)
-      textTheme: TextTheme(
-        displayLarge: GoogleFonts.outfit(
-          fontSize: 32,
-          fontWeight: FontWeight.bold,
-          color: secondary,
-          letterSpacing: -0.5,
-        ),
-        displayMedium: GoogleFonts.outfit(
-          fontSize: 28,
-          fontWeight: FontWeight.w600,
-          color: secondary,
-          letterSpacing: -0.5,
-        ),
-        headlineLarge: GoogleFonts.outfit(
-          fontSize: 24,
-          fontWeight: FontWeight.w600,
-          color: secondary,
-        ),
-        headlineMedium: GoogleFonts.outfit(
-          fontSize: 20,
-          fontWeight: FontWeight.w500,
-          color: secondary,
-        ),
-        titleLarge: GoogleFonts.dmSans(
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-          color: secondary,
-        ),
-        bodyLarge: GoogleFonts.dmSans(
-          fontSize: 16,
-          fontWeight: FontWeight.normal,
-          color: secondary,
-        ),
-        bodyMedium: GoogleFonts.dmSans(
-          fontSize: 14,
-          fontWeight: FontWeight.normal,
-          color: textSecondary,
-        ),
-        labelLarge: GoogleFonts.dmSans(
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 0.5,
-          color: Colors.black, // For buttons
-        ),
+      // Typography - Gilroy
+      textTheme: const TextTheme(
+        displayLarge: TextStyle(fontFamily: 'Gilroy', fontSize: 32, fontWeight: FontWeight.w700, color: secondary, letterSpacing: -0.5),
+        displayMedium: TextStyle(fontFamily: 'Gilroy', fontSize: 28, fontWeight: FontWeight.w600, color: secondary, letterSpacing: -0.5),
+        headlineLarge: TextStyle(fontFamily: 'Gilroy', fontSize: 24, fontWeight: FontWeight.w600, color: secondary),
+        headlineMedium: TextStyle(fontFamily: 'Gilroy', fontSize: 20, fontWeight: FontWeight.w500, color: secondary),
+        titleLarge: TextStyle(fontFamily: 'Gilroy', fontSize: 18, fontWeight: FontWeight.w600, color: secondary),
+        titleMedium: TextStyle(fontFamily: 'Gilroy', fontSize: 16, fontWeight: FontWeight.w500, color: secondary),
+        bodyLarge: TextStyle(fontFamily: 'Gilroy', fontSize: 16, fontWeight: FontWeight.w400, color: secondary),
+        bodyMedium: TextStyle(fontFamily: 'Gilroy', fontSize: 14, fontWeight: FontWeight.w400, color: textSecondary),
+        bodySmall: TextStyle(fontFamily: 'Gilroy', fontSize: 12, fontWeight: FontWeight.w400, color: textSecondary),
+        labelLarge: TextStyle(fontFamily: 'Gilroy', fontSize: 14, fontWeight: FontWeight.w700, letterSpacing: 0.5, color: Colors.black),
+        labelSmall: TextStyle(fontFamily: 'Gilroy', fontSize: 11, fontWeight: FontWeight.w500, color: secondary),
       ),
 
       // Icon Theme
       iconTheme: const IconThemeData(color: secondary, size: 24),
 
       // AppBar Theme
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: background,
         elevation: 0,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: secondary),
-        titleTextStyle: GoogleFonts.outfit(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: secondary,
-          letterSpacing: 0.5,
-        ),
+        iconTheme: IconThemeData(color: secondary),
+        titleTextStyle: TextStyle(fontFamily: 'Gilroy', fontSize: 20, fontWeight: FontWeight.w600, color: secondary, letterSpacing: 0.5),
       ),
 
       // Card Theme
-      cardTheme: CardTheme(
-        color: surface,
-        elevation: 4,
-        shadowColor: Colors.black.withOpacity(0.3),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      ),
+      cardTheme: CardThemeData(color: surface, elevation: 4, shadowColor: Colors.black.withOpacity(0.3), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
 
       // Button Themes
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -104,32 +55,18 @@ class AppTheme {
           foregroundColor: Colors.black, // Text color on primary button
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          textStyle: GoogleFonts.dmSans(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          textStyle: const TextStyle(fontFamily: 'Gilroy', fontSize: 16, fontWeight: FontWeight.w700),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: surface,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: primary, width: 1.5),
-        ),
-        hintStyle: GoogleFonts.dmSans(color: textSecondary),
-        labelStyle: GoogleFonts.dmSans(color: secondary),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: primary, width: 1.5)),
+        hintStyle: const TextStyle(fontFamily: 'Gilroy', color: textSecondary),
+        labelStyle: const TextStyle(fontFamily: 'Gilroy', color: secondary),
       ),
     );
   }

@@ -10,12 +10,13 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  google_fonts: ^6.3.2
   flutter_bloc: ^9.1.1
+  iconly: ^1.0.1
+  hugeicons: ^1.1.5
   equatable: ^2.0.8
   cached_network_image: ^3.4.1
   shimmer: ^3.0.0
-  intl: ^0.19.0
+  intl: ^0.20.2
   badges: ^3.1.2
   excel:
     path: packages/excel
@@ -33,5 +34,17 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+  
+  fonts:
+    - family: Gilroy
+      fonts:
+        - asset: fonts/Gilroy-Regular.ttf
+          weight: 400
+        - asset: fonts/Gilroy-Medium.ttf
+          weight: 500
+        - asset: fonts/Gilroy-SemiBold.ttf
+          weight: 600
+        - asset: fonts/Gilroy-Bold.ttf
+          weight: 700
 
 

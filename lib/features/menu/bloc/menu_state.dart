@@ -13,22 +13,15 @@ class MenuInitial extends MenuState {}
 class MenuLoading extends MenuState {}
 
 class MenuLoaded extends MenuState {
-  final List<MenuItem> allItems;
+  final List<MenuItem> allItems; // Only available items for home screen
+  final List<MenuItem> allItemsIncludingUnavailable; // All items for product management
   final Map<String, List<MenuItem>> categorizedItems;
   final String? selectedCategory;
 
-  const MenuLoaded({
-    required this.allItems,
-    required this.categorizedItems,
-    this.selectedCategory,
-  });
+  const MenuLoaded({required this.allItems, required this.allItemsIncludingUnavailable, required this.categorizedItems, this.selectedCategory});
 
   @override
-  List<Object> get props => [
-    allItems,
-    categorizedItems,
-    selectedCategory ?? '',
-  ];
+  List<Object> get props => [allItems, allItemsIncludingUnavailable, categorizedItems, selectedCategory ?? ''];
 }
 
 class MenuError extends MenuState {

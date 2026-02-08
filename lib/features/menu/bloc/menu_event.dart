@@ -25,3 +25,11 @@ class AddMenuItem extends MenuEvent {
   @override
   List<Object> get props => [item];
 }
+
+class UpdateMenuItem extends MenuEvent {
+  final MenuItem item;
+  const UpdateMenuItem(this.item);
+
+  @override
+  List<Object> get props => [item];
+}
